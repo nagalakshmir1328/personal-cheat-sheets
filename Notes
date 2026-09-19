@@ -13,3 +13,8 @@ memory leak via double-allocation:
   ptr = new int{}; // old address lost, memory leak results
 
 new[] and delete []
+
+Global variables are constructed before main() and destroyed after main().
+RAII (Resource Acquisition Is Initialization)
+
+A warning about the std::exit() function (Note that if you use the std::exit() function, your program will terminate and no destructors will be called. Be wary if you’re relying on your destructors to do necessary cleanup work)
