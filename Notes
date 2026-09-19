@@ -1,0 +1,15 @@
+Memory leaks
+  void doSomething()
+  {
+      int* ptr{ new int{} };
+  }
+
+  int value = 5;
+  int* ptr{ new int{} }; // allocate memory
+  ptr = &value; // old address lost, memory leak results
+
+memory leak via double-allocation:
+  int* ptr{ new int{} };
+  ptr = new int{}; // old address lost, memory leak results
+
+new[] and delete []
