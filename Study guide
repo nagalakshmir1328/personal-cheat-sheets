@@ -1,0 +1,6 @@
+A practical 5-day crash path:
+- Day 1: pointers vs references, const, object lifetime, stack vs heap, RAII.
+- Day 2: constructors/destructors, copy/move constructor and assignment, Rule of 0/3/5, smart pointers.
+- Day 3: STL containers, iterators, algorithms, complexity.
+- Day 4: inheritance, virtual functions, polymorphism, templates, lambdas.
+- Day 5: solve C++ DSA problems and explain every design choice aloud.
