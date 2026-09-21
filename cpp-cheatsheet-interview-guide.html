@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C++ Cheat Sheet & Interview Guide</title>
+  <style>
+    :root { --ink:#172033; --muted:#5b6475; --paper:#fffdf8; --panel:#ffffff; --line:#e5e7eb; --navy:#12213d; --teal:#0f766e; --amber:#b45309; --code:#132238; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:#f4f6f8; color:var(--ink); font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    header { background:linear-gradient(125deg,#10213d,#155e75); color:white; padding:4.5rem max(1.25rem,calc((100% - 1120px)/2)); }
+    header h1 { margin:0; font-size:clamp(2rem,5vw,3.5rem); line-height:1.08; }
+    header p { max-width:760px; margin:1rem 0 0; color:#d8f4f1; font-size:1.08rem; }
+    main { width:min(1120px,100% - 2.5rem); margin:2rem auto 4rem; display:grid; grid-template-columns:230px minmax(0,1fr); gap:2.5rem; }
+    nav { position:sticky; top:1.25rem; align-self:start; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:1rem; }
+    nav strong { display:block; margin:.15rem .55rem .45rem; }
+    nav a { display:block; padding:.3rem .55rem; color:#34445f; text-decoration:none; border-radius:6px; font-size:.91rem; }
+    nav a:hover { background:#e7f5f3; color:var(--teal); }
+    article { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:clamp(1.3rem,4vw,3.25rem); box-shadow:0 10px 30px #25344a0b; }
+    section { scroll-margin-top:1rem; padding-top:.3rem; }
+    section + section { margin-top:3rem; }
+    h2 { font-size:1.65rem; line-height:1.2; margin:0 0 .8rem; color:var(--navy); }
+    h3 { font-size:1.14rem; margin:1.55rem 0 .5rem; color:#183c58; }
+    p, li { max-width:78ch; }
+    code { font:0.9em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; background:#edf1f5; padding:.12em .3em; border-radius:4px; }
+    pre { overflow:auto; padding:1rem 1.15rem; border-radius:10px; background:var(--code); color:#eaf5ff; box-shadow:inset 0 0 0 1px #ffffff12; }
+    pre code { padding:0; background:none; color:inherit; font-size:.9rem; }
+    table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:.94rem; }
+    th { text-align:left; background:#e8f2f2; color:#124a54; }
+    th,td { border:1px solid var(--line); padding:.55rem .7rem; vertical-align:top; }
+    .tip { border-left:4px solid var(--teal); padding:.75rem 1rem; background:#eaf8f6; border-radius:0 8px 8px 0; }
+    .warn { border-left:4px solid var(--amber); padding:.75rem 1rem; background:#fff6e8; border-radius:0 8px 8px 0; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1rem; }
+    .card h3 { margin-top:0; }
+    footer { border-top:1px solid var(--line); margin-top:3rem; padding-top:1.5rem; color:var(--muted); font-size:.9rem; }
+    a { color:#08736d; }
+    @media (max-width:800px) { main { display:block; width:min(100% - 1.5rem,720px); } nav { position:static; margin-bottom:1.5rem; columns:2; } nav strong { column-span:all; } article { padding:1.35rem; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>C++ Cheat Sheet<br>&amp; Interview Guide</h1>
+    <p>A corrected, modern C++ reference distilled from the supplied materials. Focus: everyday syntax, standard-library fluency, safe resource management, and answers that hold up in interviews.</p>
+  </header>
+  <main>
+    <nav aria-label="Table of contents">
+      <strong>Contents</strong>
+      <a href="#start">1. Start &amp; compile</a><a href="#types">2. Types &amp; values</a><a href="#flow">3. Flow &amp; functions</a><a href="#containers">4. Containers &amp; STL</a><a href="#oop">5. Classes &amp; OOP</a><a href="#resources">6. RAII &amp; memory</a><a href="#errors">7. Errors &amp; files</a><a href="#interviews">8. Interview answers</a><a href="#checklist">9. Checklist &amp; pitfalls</a><a href="#sources">Sources</a>
+    </nav>
+    <article>
+      <section id="start">
+        <h2>1. Program skeleton and compilation</h2>
+        <pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+int main() {
+    std::cout &lt;&lt; "Hello, C++!\n";
+    return 0; // optional in main
+}</code></pre>
+        <pre><code>g++ -std=c++17 -Wall -Wextra -Wpedantic main.cpp -o app
+./app</code></pre>
+        <ul><li><code>#include</code> makes declarations from a header available. Include the smallest header that provides what you use.</li><li><code>std::</code> names the standard-library namespace. Avoid <code>using namespace std;</code> in headers; explicit qualification is generally clearer.</li><li>Prefer <code>\n</code> for ordinary line endings. <code>std::endl</code> also flushes the stream.</li></ul>
+      </section>
+
+      <section id="types">
+        <h2>2. Types, initialization, pointers, and references</h2>
+        <pre><code>int count = 3;
+double price = 19.99;
+char grade = 'A';
+bool ready = true;
+std::string name = "Ada";
+
+const int maxRetries = 3;       // cannot change through this name
+constexpr int bufferSize = 64;  // compile-time constant
+auto total = price * count;     // deduced as double
+
+int safe{42};                   // brace initialization rejects narrowing</code></pre>
+        <div class="tip"><strong>Sizes are implementation-dependent.</strong> Do not assume that <code>int</code> is always four bytes. When an exact width matters, use <code>&lt;cstdint&gt;</code>, for example <code>std::int32_t</code>, and inspect limits with <code>std::numeric_limits&lt;T&gt;</code>.</div>
+        <h3>Pointers, references, and <code>const</code></h3>
+        <pre><code>int value = 10;
+int&amp; ref = value;                  // alias: cannot reseat
+int* ptr = &amp;value;                  // address: may be null/reseated
+const int* readOnly = &amp;value;       // cannot modify through this pointer
+
+if (ptr != nullptr) *ptr = 20;</code></pre>
+        <ul><li>Use a reference when an argument is required and should behave as an alias.</li><li>Use a pointer when absence (<code>nullptr</code>), reseating, or pointer arithmetic is meaningful.</li><li>Use <code>const T&amp;</code> for non-owning read-only parameters that would be expensive to copy. Pass small scalar values by value.</li></ul>
+      </section>
+
+      <section id="flow">
+        <h2>3. Operators, control flow, loops, and functions</h2>
+        <pre><code>if (score &gt;= 90) grade = 'A';
+else if (score &gt;= 75) grade = 'B';
+else grade = 'C';
+
+const char* label = (count == 1) ? "item" : "items";
+
+switch (day) {
+case 1: /* ... */ break;
+case 2: /* ... */ break;
+default: /* fallback */ break;
+}</code></pre>
+        <table><thead><tr><th>Category</th><th>Operators</th></tr></thead><tbody><tr><td>Arithmetic</td><td><code>+ - * / %</code></td></tr><tr><td>Comparison</td><td><code>== != &lt; &lt;= &gt; &gt;=</code></td></tr><tr><td>Logical</td><td><code>&amp;&amp; || !</code></td></tr><tr><td>Assignment</td><td><code>= += -= *= /= %=</code></td></tr><tr><td>Bitwise</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td></tr></tbody></table>
+        <div class="warn"><strong>Important corrections:</strong> <code>=</code> assigns while <code>==</code> compares; integer division truncates (<code>5 / 2 == 2</code>). C++ logical operators are <code>&amp;&amp;</code>, <code>||</code>, and <code>!</code>, not Python's <code>and</code>, <code>or</code>, or <code>not</code>.</div>
+        <pre><code>for (int i = 0; i &lt; 5; ++i) { /* known count */ }
+while (hasMore()) { /* repeat while true */ }
+for (const auto&amp; item : items) std::cout &lt;&lt; item &lt;&lt; '\n';
+
+int add(int a, int b) { return a + b; }
+void normalize(std::string&amp; text) { /* modifies caller */ }
+bool isValid(const std::string&amp; text) { return !text.empty(); }</code></pre>
+        <p>Prefer range-based <code>for</code> for each element. <code>break</code> exits the nearest loop/switch; <code>continue</code> skips to the next iteration. Recursion needs a base case and must make progress toward it.</p>
+      </section>
+
+      <section id="containers">
+        <h2>4. Strings, containers, algorithms, and lambdas</h2>
+        <pre><code>#include &lt;array&gt;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;unordered_map&gt;
+#include &lt;vector&gt;
+
+std::array&lt;int, 3&gt; fixed{1, 2, 3};
+std::vector&lt;int&gt; values{1, 2, 3};
+values.push_back(4);
+
+std::string text = "hello";
+text += " world";
+auto part = text.substr(0, 5);
+
+std::map&lt;std::string, int&gt; ordered;
+std::unordered_map&lt;std::string, int&gt; counts;
+std::set&lt;int&gt; unique;</code></pre>
+        <table><thead><tr><th>Need</th><th>Default choice</th><th>Why</th></tr></thead><tbody><tr><td>Resizable indexed sequence</td><td><code>std::vector</code></td><td>Contiguous and cache-friendly; great default.</td></tr><tr><td>Fixed element count</td><td><code>std::array</code></td><td>Type-safe fixed-size array.</td></tr><tr><td>Sorted key/value pairs</td><td><code>std::map</code></td><td>O(log n), ordered traversal/range queries.</td></tr><tr><td>Fast key/value lookup</td><td><code>std::unordered_map</code></td><td>Average O(1), no key order.</td></tr><tr><td>Unique sorted values</td><td><code>std::set</code></td><td>Membership plus ordering.</td></tr><tr><td>Queue-like ends</td><td><code>std::deque</code></td><td>Efficient front/back operations.</td></tr></tbody></table>
+        <p><code>vector::operator[]</code> is unchecked; use <code>.at()</code> when checking matters. <code>map[key]</code> inserts a missing key; use <code>.find()</code> when a lookup must not insert.</p>
+        <pre><code>#include &lt;algorithm&gt;
+#include &lt;numeric&gt;
+
+std::sort(values.begin(), values.end());
+auto it = std::find(values.begin(), values.end(), 42);
+bool found = it != values.end();
+values.erase(std::remove(values.begin(), values.end(), 0), values.end());
+int sum = std::accumulate(values.begin(), values.end(), 0);
+
+auto isEven = [](int n) { return n % 2 == 0; };
+int evens = std::count_if(values.begin(), values.end(), isEven);</code></pre>
+        <p>Algorithms use half-open ranges: <code>[begin, end)</code>. The first position is included, the end position is excluded. Lambda captures: <code>[]</code> none, <code>[x]</code> by value, <code>[&amp;x]</code> by reference, <code>[=]</code> used locals by value, <code>[&amp;]</code> used locals by reference.</p>
+      </section>
+
+      <section id="oop">
+        <h2>5. Classes, OOP, and templates</h2>
+        <pre><code>class Account {
+public:
+    explicit Account(std::string owner, double balance = 0.0)
+        : owner_{std::move(owner)}, balance_{balance} {}
+
+    void deposit(double amount) { balance_ += amount; }
+    double balance() const { return balance_; }
+
+private:
+    std::string owner_;
+    double balance_{};
+};</code></pre>
+        <ul><li><code>class</code> members are private by default; <code>struct</code> members are public by default.</li><li>Encapsulation is private state with public operations that preserve its invariants.</li><li>Use a member initializer list. Members initialize in declaration order.</li><li>Mark a one-argument constructor <code>explicit</code> unless implicit conversion is intentional.</li><li>Prefer composition for a <em>has-a</em> relationship; use inheritance for a genuine <em>is-a</em> relationship.</li></ul>
+        <pre><code>class Shape {
+public:
+    virtual ~Shape() = default;
+    virtual double area() const = 0;
+};
+
+class Circle final : public Shape {
+public:
+    explicit Circle(double r) : radius_{r} {}
+    double area() const override { return 3.141592653589793 * radius_ * radius_; }
+private:
+    double radius_;
+};
+
+template &lt;typename T&gt;
+T maximum(T a, T b) { return a &lt; b ? b : a; }</code></pre>
+        <div class="tip">Use <code>override</code> on overridden virtual functions. A polymorphic base class needs a virtual destructor. Templates usually keep their definitions in headers because the compiler instantiates them where they are used.</div>
+      </section>
+
+      <section id="resources">
+        <h2>6. RAII, ownership, copying, and moving</h2>
+        <p><strong>RAII</strong> means acquire a resource in an object's constructor and release it in its destructor. It is C++'s core resource-safety pattern.</p>
+        <pre><code>#include &lt;fstream&gt;
+#include &lt;memory&gt;
+
+auto file = std::ifstream{"input.txt"}; // closes at scope exit
+auto oneOwner = std::make_unique&lt;Widget&gt;();
+auto shared = std::make_shared&lt;Widget&gt;();</code></pre>
+        <ul><li>Prefer local objects, standard containers, and <code>std::unique_ptr</code> over raw <code>new</code>/<code>delete</code>.</li><li><code>unique_ptr</code> represents exclusive ownership; it moves but does not copy.</li><li><code>shared_ptr</code> represents shared ownership. Use it sparingly; use <code>weak_ptr</code> to break ownership cycles.</li><li>Copying duplicates a value/resource. Moving transfers resources; a moved-from object remains valid but its value is unspecified.</li><li>Follow the <strong>rule of zero</strong>: let members manage resources so you write no destructor or copy/move operations. Manual resource owners need the rule of five.</li></ul>
+      </section>
+
+      <section id="errors">
+        <h2>7. Exceptions, errors, and source layout</h2>
+        <pre><code>try {
+    values.at(100);
+} catch (const std::out_of_range&amp; error) {
+    std::cerr &lt;&lt; error.what() &lt;&lt; '\n';
+}</code></pre>
+        <p>Use exceptions for exceptional failure, not routine branching. Catch by <code>const&amp;</code> to avoid slicing/copying. Destructors should not throw. Expected failures may be clearer as an error code, <code>std::optional&lt;T&gt;</code>, or a result type.</p>
+        <pre><code>// widget.hpp
+#pragma once
+class Widget { /* declaration */ };
+
+// widget.cpp
+#include "widget.hpp"
+// non-template definitions</code></pre>
+        <p>Headers declare interfaces; source files define ordinary implementation. Use include guards or <code>#pragma once</code>, and never put <code>using namespace ...</code> in a header.</p>
+      </section>
+
+      <section id="interviews">
+        <h2>8. High-value interview answers</h2>
+        <div class="grid">
+          <div class="card"><h3><code>vector</code> vs <code>list</code></h3><p><code>vector</code> is contiguous, cache-friendly, and offers O(1) indexing; it is the usual default. Middle insertion/erasure is O(n). A <code>list</code> supports O(1) insertion/erasure only when its iterator is already known, but has poor locality and no random access.</p></div>
+          <div class="card"><h3><code>map</code> vs <code>unordered_map</code></h3><p><code>map</code> orders keys and gives O(log n) operations. <code>unordered_map</code> has average O(1) lookup but no order and can degrade in worst cases. It is not automatically faster for every use.</p></div>
+          <div class="card"><h3>Stack vs heap</h3><p>Local automatic objects normally live until scope exit. Dynamic objects may outlive their creating scope, but need explicit ownership. Prefer local RAII objects; do not equate implementation storage details with semantic lifetime.</p></div>
+          <div class="card"><h3><code>const</code> correctness</h3><p><code>const</code> prevents modification through a name. A const member function cannot modify ordinary member state and can be called on a const object. It creates safer, clearer APIs.</p></div>
+          <div class="card"><h3>Smart pointers</h3><p>Raw <code>new</code>/<code>delete</code> is fragile with exceptions and early returns. Smart pointers express ownership and release automatically. Prefer <code>make_unique</code> or <code>make_shared</code>.</p></div>
+          <div class="card"><h3><code>struct</code> vs <code>class</code></h3><p>The language difference is default access and inheritance: public for <code>struct</code>, private for <code>class</code>. Convention uses structs for simple passive data and classes for encapsulated behavior.</p></div>
+        </div>
+      </section>
+
+      <section id="checklist">
+        <h2>9. Interview checklist and common pitfalls</h2>
+        <ol><li>Restate the input, output, constraints, and edge cases.</li><li>Give a simple baseline, then its time and space complexity.</li><li>Select a data structure for a clear reason: lookup, ordering, uniqueness, or contiguous access.</li><li>State the invariant you maintain as you code.</li><li>Mentally test empty inputs, one element, duplicates, negative values, overflow, and boundary indices.</li><li>Check lifetime, ownership, iterator invalidation, headers, and signed/unsigned comparisons.</li></ol>
+        <div class="warn"><strong>Watch for:</strong> returning a reference/pointer to a local; dereferencing null or invalid iterators; no virtual destructor in a polymorphic base; object slicing; copying a large container accidentally; assuming moved-from content; retaining vector iterators through reallocation; and accidentally inserting via <code>map[key]</code>.</div>
+      </section>
+
+      <footer id="sources">
+        <h2>Source material</h2>
+        <p>This guide synthesized the supplied sources while correcting isolated malformed or non-C++ examples: <a href="https://www.geeksforgeeks.org/cpp/cpp-cheatsheet/">GeeksforGeeks</a>, <a href="https://www.codewithharry.com/blogpost/cpp-cheatsheet">CodeWithHarry</a>, <a href="https://hackingcpp.com/cpp/cheat_sheets">hacking C++</a>, <a href="https://github.com/mortennobel/cpp-cheatsheet">mortennobel/cpp-cheatsheet</a>, <a href="https://quickref.me/cpp.html">QuickRef</a>, <a href="https://github.com/gibsjose/cpp-cheat-sheet/blob/master/C%2B%2B%20Syntax.md">gibsjose</a>, and <a href="https://programiz.pro/resources/cpp-cheat-sheet/">Programiz</a>.</p>
+      </footer>
+    </article>
+  </main>
+</body>
+</html>
